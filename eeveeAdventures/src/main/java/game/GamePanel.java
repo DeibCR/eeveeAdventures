@@ -47,6 +47,10 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
        if (currentScenario instanceof Scenario1){
            ((Scenario1) currentScenario).update(character);
        }
+
+       character.update();
+
+
        if (currentScenario.checkCompletion(character)){
            System.out.println("Scenario Completed!");
            running=false;
@@ -76,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
             break;
             case KeyEvent.VK_LEFT: character.moveLeft();
             break;
-            case KeyEvent.VK_SPACE: character.attack();
+            case KeyEvent.VK_SPACE: character.startAttack();
             break;
 
         }
@@ -91,7 +95,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
                 character.stopMoving();
                 break;
             case KeyEvent.VK_SPACE:
-                character.attack();
+
                 break;
         }
 

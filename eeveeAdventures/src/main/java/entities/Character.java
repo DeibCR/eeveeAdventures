@@ -78,5 +78,5 @@ public abstract class Character {
         this.alive = alive;
     }
 
-    public abstract void attack();
+
 }

@@ -15,7 +15,7 @@ public class Scenario1 extends Scenario {
     private BufferedImage backgroundImage;
 
     public Scenario1(){
-        this.boss= new Boss(600,300,200,2,"src/main/resources/images/Boss/Boss1/1.png");
+        this.boss= new Boss(1000,370,200,7,"src/main/resources/images/Boss/Boss1/left");
         this.completed=false;
 
         try{
@@ -46,7 +46,7 @@ public class Scenario1 extends Scenario {
 
     @Override
     public boolean checkCompletion(MainCharacter character) {
-        if (!boss.isAlive() && character.getX() >750){
+        if (!boss.isAlive() && character.getX() >1150){
             completed=true;
         }
         return completed;
@@ -54,7 +54,7 @@ public class Scenario1 extends Scenario {
 
     public void update(MainCharacter character){
         if (boss.isAlive()){
-            boss.update();
+            boss.update(character);
 
             if (Math.abs(character.getX() - boss.getX()) <50){
                 boss.attack(character);
