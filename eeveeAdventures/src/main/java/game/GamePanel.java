@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     private Thread gameThread;
 
     public GamePanel(){
-        this.character= new MainCharacter(50,370,100,25);
+        this.character= new MainCharacter(50,370,200,25);
         this.currentScenario= new Scenario1();
 
         setPreferredSize(new Dimension(1200,675));
@@ -76,6 +76,8 @@ public class GamePanel extends JPanel implements Runnable,KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()){
+            case KeyEvent.VK_UP:   character.startJump();
+            break;
             case KeyEvent.VK_RIGHT: character.moveRight();
             break;
             case KeyEvent.VK_LEFT: character.moveLeft();
