@@ -49,9 +49,10 @@ public class Boss extends Character {
             attackCooldown--;
         }
 
-        int disctanceToCharacter= Math.abs(character.getX() - this.x);
 
-        if (disctanceToCharacter < moveRange && disctanceToCharacter > 50){
+        int distanceToCharacter= Math.abs(character.getX() - this.x);
+
+        if (distanceToCharacter < moveRange && distanceToCharacter > 50){
             if (character.getX() > this.x){
                 move(1,0);
             } else if (character.getX()<this.x) {
@@ -60,7 +61,7 @@ public class Boss extends Character {
             }
             updateAnimation();
         }
-        if (disctanceToCharacter <=50){
+        if (distanceToCharacter <=50){
             attack(character);
         }
     }

@@ -10,6 +10,5 @@ public class GameLauncher {
         frame.setSize(1200,675);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-
     }
 }

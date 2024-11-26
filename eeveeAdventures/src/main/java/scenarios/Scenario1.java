@@ -12,14 +12,22 @@ import java.io.IOException;
 public class Scenario1 extends Scenario {
     private Boss boss;
     private boolean completed;
-    private BufferedImage backgroundImage;
+    private BufferedImage [] backgroundISections;
+    private int screenWidth= 1200;
+    private int screenHeight=675;
+    private int currentSectionIndex=0;
+
 
     public Scenario1(){
-        this.boss= new Boss(1000,370,200,7,"src/main/resources/images/Boss/Boss1/left");
+        int bossXInSection= screenWidth +800;
+        this.boss= new Boss(bossXInSection,370,200,7,"src/main/resources/images/Boss/Boss1/left");
         this.completed=false;
 
+
+        backgroundISections= new BufferedImage[2];
         try{
-            backgroundImage = ImageIO.read(new File("src/main/resources/images/scenarios/scenario01.png"));
+            backgroundISections[0] = ImageIO.read(new File("src/main/resources/images/scenarios/01/01.png"));
+            backgroundISections[1]= ImageIO.read(new File("src/main/resources/images/scenarios/01/02.png"));
         }catch (IOException e){
             e.printStackTrace();
             System.out.println("Failed to load background image for Scenario1");
@@ -28,16 +36,19 @@ public class Scenario1 extends Scenario {
 
     @Override
     public void render(Graphics g) {
-        if (backgroundImage != null){
-            g.drawImage(backgroundImage,0,0,null);
+        if (backgroundISections[currentSectionIndex] != null){
+
+            g.drawImage(backgroundISections[currentSectionIndex],0,0,screenWidth,screenHeight,null);
         } else {
             g.setColor(new Color(135,206,250));
             g.fillRect(0,0,1200,675);
         }
 
-        if (boss.isAlive()){
+
+        if (currentSectionIndex==1 && boss.isAlive()){
+            int bossRenderX = boss.getX() - currentSectionIndex *screenWidth;
             boss.render(g);
-        } else {
+        } else if (!boss.isAlive()) {
             g.setColor(Color.RED);
             g.drawString("Boss defeated! Move to the next scenario", 200,100);
         }
@@ -46,22 +57,40 @@ public class Scenario1 extends Scenario {
 
     @Override
     public boolean checkCompletion(MainCharacter character) {
-        if (!boss.isAlive() && character.getX() >1150){
+        int charX= character.getX();
+        int totalX= charX +(currentSectionIndex*screenWidth);
+
+        if (currentSectionIndex == 1 && totalX >1150 && !boss.isAlive()){
             completed=true;
         }
         return completed;
     }
 
-    public void update(MainCharacter character){
-        if (boss.isAlive()){
+    public void update(MainCharacter character) {
+        if (currentSectionIndex ==1 && boss.isAlive()) {
             boss.update(character);
 
-            if (Math.abs(character.getX() - boss.getX()) <50){
+            if (Math.abs(character.getX() - boss.getX()) < 50) {
                 boss.attack(character);
                 character.attack(boss);
 
-                }
             }
         }
+        updateBackgroundSection(character);
 
+    }
+
+    private void updateBackgroundSection(MainCharacter character){
+        int charX= character.getX();
+       if (charX >=(currentSectionIndex+1)*screenWidth){
+           currentSectionIndex++;
+           character.setX(0);
+       }
+
+       if (currentSectionIndex >= backgroundISections.length){
+           currentSectionIndex=backgroundISections.length-1;
+       }
+
+
+    }
 }
