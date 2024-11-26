@@ -126,7 +126,7 @@ public class MainCharacter extends Character {
         if (!attacking && attackCooldown ==0){
             attacking=true;
             attackFrame=0;
-            originalX= x;
+           // originalX= x;
         }
     }
 
@@ -135,7 +135,6 @@ public class MainCharacter extends Character {
             jumping=true;
             jumpFrame=0;
             jumpPeak= groundY-jumpHeight;
-            //System.out.println("Character Y Position: " + y);
         }
     }
 
@@ -158,12 +157,12 @@ public class MainCharacter extends Character {
             attackFrame++;
 
             if (attackFrame==1){
-                x +=facingRight ? 50:50;
+                x +=facingRight ? 50:-50;
             }
 
 
             if (attackFrame >= attackRightSprites.length){
-                x=originalX;
+              //  x=originalX;
                 attacking=false;
                 attackCooldown=30;
             }
@@ -172,6 +171,7 @@ public class MainCharacter extends Character {
         }
 
         if (jumping){
+
             if (y > jumpPeak && jumpFrame < jumpRightSprites.length){
                 y -=jumpSpeed;
                 jumpSpeed -=1;
@@ -182,7 +182,7 @@ public class MainCharacter extends Character {
                 jumpSpeed +=1;
 
             }else {
-                y =groundY;
+               // y =groundY;
                 jumping=false;
                 jumpSpeed=10;
             }
