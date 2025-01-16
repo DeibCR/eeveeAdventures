@@ -2,6 +2,7 @@ package scenarios;
 
 import entities.Boss;
 import entities.MainCharacter;
+import entities.NPC;
 
 import java.awt.*;
 import javax.imageio.ImageIO;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 public class Scenario1 extends Scenario {
     private Boss boss;
+    private NPC npc;
     private boolean completed;
     private BufferedImage [] backgroundISections;
     private int screenWidth= 1200;
@@ -20,8 +22,17 @@ public class Scenario1 extends Scenario {
 
     public Scenario1(){
         int bossXInSection= screenWidth +800;
-        this.boss= new Boss(bossXInSection,370,200,7,"src/main/resources/images/Boss/Boss1/left");
+        this.boss= new Boss(300,370,200,7,"src/main/resources/images/Boss/Boss1/left");
         this.completed=false;
+
+        int npcX = 300;
+        int npcY = 220;
+        String[] npcDialog = {
+                "Hello, friend!",
+                "This area is safe, but be cautious ahead.",
+                "Good luck on your journey!"
+        };
+        this.npc = new NPC(npcX, npcY, 200, 200, npcDialog);
 
 
         backgroundISections= new BufferedImage[2];
@@ -44,9 +55,13 @@ public class Scenario1 extends Scenario {
             g.fillRect(0,0,1200,675);
         }
 
+        if (currentSectionIndex==0){
+            npc.render(g,0);
+        }
+
 
         if (currentSectionIndex==1 && boss.isAlive()){
-            int bossRenderX = boss.getX() - currentSectionIndex *screenWidth;
+           // int bossRenderX = boss.getX() - currentSectionIndex *screenWidth;
             boss.render(g);
         } else if (!boss.isAlive()) {
             g.setColor(Color.RED);
@@ -67,6 +82,20 @@ public class Scenario1 extends Scenario {
     }
 
     public void update(MainCharacter character) {
+
+        if (currentSectionIndex == 0) {
+            if (npc.isPlayerClose(character.getX(), character.getY())) {
+                if (!npc.isTalking()) {
+                    npc.startConversation();
+                } else {
+                    npc.continueConversation();
+                }
+            } else {
+                npc.stopConversation();
+            }
+        }
+
+
         if (currentSectionIndex ==1 && boss.isAlive()) {
             boss.update(character);
 
@@ -82,6 +111,7 @@ public class Scenario1 extends Scenario {
 
     private void updateBackgroundSection(MainCharacter character){
         int charX= character.getX();
+
        if (charX >=(currentSectionIndex+1)*screenWidth){
            currentSectionIndex++;
            character.setX(0);
